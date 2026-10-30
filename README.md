@@ -25,33 +25,6 @@ It includes automated data pipelines, PySpark transformations, data quality vali
 
 **Data disclaimer:** All automotive diagnostic records are synthetic and intended for educational and portfolio demonstration purposes. No confidential vehicle or company data is used.
 
-# Automotive Data Engineering & Quality Monitoring
-
-### Microsoft Fabric | PySpark | Delta Lake | SQL | Power BI
-
-[Deutsch](README_DE.md) | **English**
-
-## Project Overview
-
-This portfolio project demonstrates an end-to-end automotive data engineering solution built with Microsoft Fabric.
-
-The solution processes 1,000 synthetic automotive diagnostic test records using a Bronze–Silver–Gold (Medallion) architecture.
-
-It includes automated data pipelines, PySpark transformations, data quality validation, error handling, SQL-based monitoring, and Power BI dashboards.
-
-### Key Features
-
-- Automated Bronze–Silver–Gold data processing
-- Synthetic automotive diagnostic data generation
-- Data cleaning and validation using PySpark
-- Data quality gates with positive and negative tests
-- Delta Lake storage in Microsoft Fabric Lakehouse
-- SQL validation and monitoring views
-- Quality KPIs by ECU, error category, and month
-- Power BI dashboards for monitoring and simulated error scenarios
-
-**Data disclaimer:** All automotive diagnostic records are synthetic and intended for educational and portfolio demonstration purposes. No confidential vehicle or company data is used.
-
 ---
 
 ## Solution Architecture
