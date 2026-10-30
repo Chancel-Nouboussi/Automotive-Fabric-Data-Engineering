@@ -1,0 +1,42 @@
+{
+    "name": "PL_Data_Quality_Negative_Test",
+    "objectId": "e48c3006-9b8d-49d7-88ab-6df49774817e",
+    "properties": {
+        "activities": [
+            {
+                "name": "ACT_01_Negative_Quality_Gate",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "bf71f192-136c-492e-a999-87af7071cf10",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotiveNegativeTest"
+                }
+            },
+            {
+                "name": "ACT_02_Should_Not_Run",
+                "type": "Wait",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_01_Negative_Quality_Gate",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "waitTimeInSeconds": 5
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "b7a6963c-8ac2-420e-a63a-b3e1793eb637",
+        "lastPublishTime": "2026-10-29T09:19:08Z"
+    }
+}

@@ -1,0 +1,111 @@
+{
+    "name": "PL_Automotive_Data_Processing",
+    "objectId": "176fbec0-6d76-4fef-9cd6-873180e5fb37",
+    "properties": {
+        "activities": [
+            {
+                "name": "ACT_01_Bronze_Ingestion",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "5c6bee95-2c72-4a85-91b8-fa1d0c7f3a5a",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotivePipeline"
+                },
+                "externalReferences": {
+                    "connection": "0c6dd59a-6fcb-4b6a-8141-c0194c458462"
+                }
+            },
+            {
+                "name": "ACT_02_Silver_Transformation",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_02_Data_Quality",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "8464bc52-98e4-4f12-b717-cb7e548af0d2",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotivePipeline"
+                },
+                "externalReferences": {
+                    "connection": "0c6dd59a-6fcb-4b6a-8141-c0194c458462"
+                }
+            },
+            {
+                "name": "ACT_03_Gold_KPI",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_02_Silver_Transformation",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "d18527eb-97b3-46d6-b5e4-60055d01a550",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotivePipeline"
+                },
+                "externalReferences": {
+                    "connection": "0c6dd59a-6fcb-4b6a-8141-c0194c458462"
+                }
+            },
+            {
+                "name": "ACT_02_Data_Quality",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_01_Bronze_Ingestion",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "549b4ed4-e5c9-42d2-a085-88d5b278146d",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotivePipeline"
+                },
+                "externalReferences": {
+                    "connection": "0c6dd59a-6fcb-4b6a-8141-c0194c458462"
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "b7a6963c-8ac2-420e-a63a-b3e1793eb637",
+        "lastPublishTime": "2026-10-28T12:37:56Z"
+    }
+}

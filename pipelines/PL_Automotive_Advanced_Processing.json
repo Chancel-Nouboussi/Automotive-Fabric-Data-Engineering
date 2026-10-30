@@ -1,0 +1,99 @@
+{
+    "name": "PL_Automotive_Advanced_Processing",
+    "objectId": "43b07133-d26d-49b5-b06a-23f7e8bda2e4",
+    "properties": {
+        "activities": [
+            {
+                "name": "ACT_01_Synthetic_Bronze",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "c4d54d4d-aaf6-4c74-84cd-71c85029cdf5",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotiveAdvancedPipeline"
+                }
+            },
+            {
+                "name": "ACT_02_Silver_Advanced",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_02_Data_Quality_Advanced",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "484ffbbf-1dac-4206-a0b1-0e68bdefc020",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotiveAdvancedPipeline"
+                }
+            },
+            {
+                "name": "ACT_03_Gold_Advanced_KPI",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_02_Silver_Advanced",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "2a5f8f7d-c551-4c36-808c-9e7cc7a5f273",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotiveAdvancedPipeline"
+                }
+            },
+            {
+                "name": "ACT_02_Data_Quality_Advanced",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ACT_01_Synthetic_Bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "5428ba3a-b417-420d-8a31-ef1aec8f4876",
+                    "workspaceId": "ef3fd1bd-94ea-4c61-9bea-7d12a2342ea6",
+                    "sessionTag": "AutomotiveAdvancedPipeline"
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "b7a6963c-8ac2-420e-a63a-b3e1793eb637",
+        "lastPublishTime": "2026-10-29T08:41:44Z"
+    }
+}
