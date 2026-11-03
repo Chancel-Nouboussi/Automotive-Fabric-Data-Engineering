@@ -46,7 +46,43 @@ Dabei stehen insbesondere **Datenqualität, Nachvollziehbarkeit, Automatisierung
 
 **Hinweis zu den Daten:** Sämtliche Fahrzeugdiagnose-Testfälle wurden synthetisch erzeugt. Das Projekt verwendet keine vertraulichen Fahrzeug- oder Unternehmensdaten und stellt keine produktive Unternehmenslösung dar.
 
----
+
+
+## Business Case & Data Storytelling
+
+### Von Automotive-Diagnosedaten zu aussagekräftigen Qualitätskennzahlen
+
+**Die Herausforderung**
+
+Bei der Entwicklung und Validierung von Fahrzeugsteuergeräten entstehen große Mengen an Diagnose- und Testergebnissen.
+
+Fehlende Werte, doppelte Test-IDs oder ungültige Diagnosedaten können die Aussagekraft der Analysen beeinträchtigen. Ohne automatisierte Qualitätsprüfungen und strukturierte Datenverarbeitung besteht das Risiko, dass fehlerhafte Daten in nachgelagerte Auswertungen gelangen.
+
+**Meine Lösung**
+
+Um diese Herausforderung beispielhaft zu lösen, habe ich eine durchgängige Data-Engineering-Lösung mit Microsoft Fabric, PySpark, Delta Lake, SQL und Power BI entwickelt.
+
+Die Lösung basiert auf einer Bronze-Silver-Gold-Architektur und integriert ein automatisiertes Data Quality Gate, das die Daten vor der weiteren Verarbeitung überprüft.
+
+Durch die Kombination von Datenvalidierung, automatisierten Pipelines und SQL-Analysen entsteht ein nachvollziehbarer Datenverarbeitungsprozess.
+
+**Die Ergebnisse**
+
+- 1.000 synthetische Automotive-Diagnose-Testdatensätze verarbeitet.
+- Eine automatisierte Microsoft-Fabric-Pipeline mit vier Verarbeitungsschritten erfolgreich ausgeführt.
+- Datenqualitätsprüfungen ohne erkannte Qualitätsverletzungen im regulären Testdatensatz abgeschlossen.
+- Fehlerbehandlung durch einen separaten Negativtest erfolgreich überprüft.
+- SQL-Monitoring-Views und einen Power-BI-Bericht mit zwei Berichtsseiten entwickelt.
+
+**Der geschäftliche Mehrwert**
+
+Das Projekt demonstriert, wie automatisierte Datenpipelines und Qualitätskontrollen dazu beitragen können, Datenfehler frühzeitig zu erkennen, die Nachvollziehbarkeit von Prüfergebnissen zu verbessern und verlässliche Grundlagen für datenbasierte Entscheidungen zu schaffen.
+
+Die Lösung verbindet meine Erfahrung im Automotive Softwaretesting mit modernen Methoden aus Data Engineering und Business Intelligence.
+
+**Besonderer Schwerpunkt:** Neben der Analyse von Daten entwickle ich auch technische Werkzeuge und automatisierte Lösungen zur Datenverarbeitung, Qualitätsüberwachung und Visualisierung.
+
+*Hinweis: Alle verwendeten Fahrzeugdiagnosedaten und Fehlerszenarien sind synthetisch. Der dargestellte Mehrwert beschreibt mögliche betriebliche Anwendungen und keine gemessenen Verbesserungen in einer produktiven Unternehmensumgebung.*
 
 ## Technische Architektur
 

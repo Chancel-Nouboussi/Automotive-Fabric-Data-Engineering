@@ -25,7 +25,38 @@ It includes automated data pipelines, PySpark transformations, data quality vali
 
 **Data disclaimer:** All automotive diagnostic records are synthetic and intended for educational and portfolio demonstration purposes. No confidential vehicle or company data is used.
 
+
 ---
+
+## Business Case & Data Storytelling
+
+### From Automotive Diagnostic Data to Quality Insights
+
+**The Challenge**
+
+Automotive diagnostic testing generates large volumes of data. Without consistent validation and structured processing, missing values, duplicate test IDs, and invalid diagnostic results can compromise analytical reliability.
+
+**The Solution**
+
+I designed and implemented an end-to-end data engineering workflow using Microsoft Fabric, PySpark, Delta Lake, SQL, and Power BI.
+
+The solution integrates automated data quality gates into a Bronze–Silver–Gold architecture, ensuring that validation is performed before downstream transformations.
+
+**The Results**
+
+- 1,000 synthetic automotive diagnostic records processed.
+- Automated four-stage Fabric pipeline successfully executed.
+- Data quality checks completed with no detected violations in the validated dataset.
+- Negative testing demonstrated controlled failure handling.
+- SQL monitoring views and two Power BI reporting pages developed.
+
+**The Business Value**
+
+This project demonstrates how automated data pipelines and quality controls can improve data reliability, support traceable validation, and make diagnostic quality information accessible through interactive reporting.
+
+The approach combines data engineering, software testing, and business intelligence to create a transparent and testable analytical workflow.
+
+*All datasets and scenarios are synthetic. The demonstrated benefits represent potential applications, not measured improvements in a production environment.*
 
 ## Solution Architecture
 
