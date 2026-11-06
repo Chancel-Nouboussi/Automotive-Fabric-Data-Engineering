@@ -1,0 +1,83 @@
+
+name: Automotive Fabric CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/ci-cd-automation
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-project:
+    name: Validate Fabric Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python linting tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ruff
+
+      - name: Check Python syntax
+        run: |
+          ruff check --select E9,F63,F7,F82 notebooks/
+
+      - name: Install SQLFluff
+        run: |
+          python -m pip install "sqlfluff==4.5.0"
+
+      - name: Validate SQL scripts
+        run: |
+          sqlfluff lint sql/ --dialect tsql --rules LT01
+
+      - name: Validate Fabric notebooks and pipelines
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          notebooks = sorted(Path("notebooks").glob("*.ipynb"))
+          pipelines = sorted(Path("pipelines").glob("*.json"))
+
+          assert notebooks, "No notebook files found."
+          assert pipelines, "No pipeline files found."
+
+          for file in notebooks:
+              with file.open(encoding="utf-8-sig") as f:
+                  data = json.load(f)
+
+              assert isinstance(data.get("cells"), list), (
+                  f"{file}: Missing notebook cells."
+              )
+              print(f"PASS notebook JSON: {file}")
+
+          for file in pipelines:
+              with file.open(encoding="utf-8-sig") as f:
+                  data = json.load(f)
+
+              assert isinstance(data, dict), (
+                  f"{file}: Expected a JSON object."
+              )
+              print(f"PASS pipeline JSON: {file}")
+
+          print(
+              f"Validation passed: "
+              f"{len(notebooks)} notebooks, "
+              f"{len(pipelines)} pipelines."
+          )
+          PY

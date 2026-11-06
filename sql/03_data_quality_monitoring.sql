@@ -18,7 +18,7 @@ SELECT
             WHEN QualityStatus = 'PASS'
             THEN 1 ELSE 0 END)
         / NULLIF(COUNT(*), 0)
-        AS DECIMAL(5,2)
+        AS DECIMAL(5, 2)
     ) AS QualityPassRate,
 
     SUM(TotalRows) AS TotalRowsChecked,
@@ -51,7 +51,7 @@ SELECT
             WHEN QualityStatus = 'PASS'
             THEN 1 ELSE 0 END)
         / NULLIF(COUNT(*), 0)
-        AS DECIMAL(5,2)
+        AS DECIMAL(5, 2)
     ) AS QualityPassRate
 
 FROM dbo.synthetic_data_quality_log

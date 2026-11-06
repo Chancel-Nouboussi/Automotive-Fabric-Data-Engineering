@@ -1,0 +1,8 @@
+# Ruff configuration for Microsoft Fabric notebooks
+
+# Fabric provides these names automatically at runtime.
+builtins = ["spark", "display"]
+
+# Focus CI on critical Python errors.
+[lint]
+select = ["E9", "F63", "F7", "F82"]
