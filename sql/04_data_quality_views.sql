@@ -24,7 +24,7 @@ SELECT
         100.0 * SUM(CASE WHEN QualityStatus = 'PASS'
             THEN 1 ELSE 0 END)
         / NULLIF(COUNT(*), 0)
-        AS DECIMAL(5,2)
+        AS DECIMAL(5, 2)
     ) AS QualityPassRate,
 
     SUM(
@@ -57,7 +57,7 @@ SELECT
         100.0 * SUM(CASE WHEN QualityStatus = 'PASS'
             THEN 1 ELSE 0 END)
         / NULLIF(COUNT(*), 0)
-        AS DECIMAL(5,2)
+        AS DECIMAL(5, 2)
     ) AS QualityPassRate,
 
     SUM(TotalRows) AS TotalRowsChecked,
