@@ -504,6 +504,72 @@ Die Simulationsdaten sind ausdrücklich als solche gekennzeichnet.
 
 ---
 
+---
+
+## Continuous Integration (CI) mit GitHub Actions
+
+Dieses Projekt enthält eine automatisierte Continuous-Integration-Pipeline (CI), mit der wichtige Qualitätsprüfungen für die Quelldateien des Microsoft-Fabric-Projekts durchgeführt werden.
+
+Die CI-Pipeline wurde mit **GitHub Actions** umgesetzt und unterstützt die frühzeitige Erkennung ausgewählter Code- und Formatierungsfehler.
+
+### Architektur der CI-Pipeline
+
+Die Workflow-Konfiguration befindet sich in:
+
+`.github/workflows/ci.yml`
+
+Der Workflow wird automatisch ausgeführt, wenn Änderungen auf die konfigurierten Branches hochgeladen werden oder ein Pull Request für den Hauptbranch `main` erstellt beziehungsweise aktualisiert wird.
+
+### Automatisierte Qualitätsprüfungen
+
+| Technologie | Funktion |
+|---|---|
+| GitHub Actions | Automatisierte Ausführung und Überwachung der Prüfungen |
+| Ruff | Statische Python-Prüfung der Fabric-Notebooks |
+| SQLFluff | Prüfung ausgewählter T-SQL-Formatierungsregeln |
+| Python / JSON | Überprüfung der Dateistruktur exportierter Fabric-Notebooks und Pipelines |
+| Git / GitHub | Versionsverwaltung und kontrollierte Integration über Pull Requests |
+
+### Besonderheiten von Microsoft Fabric
+
+Microsoft Fabric stellt in seiner Notebook-Umgebung bestimmte Objekte wie `spark` und `display` automatisch bereit.
+
+Für die statische Prüfung außerhalb der Fabric-Umgebung wurde deshalb die Konfigurationsdatei `ruff.toml` erstellt.
+
+Damit werden diese Laufzeitobjekte von Ruff als vordefiniert berücksichtigt.
+
+### Erfolgreiche CI-Validierung
+
+Die Pipeline wurde auf dem Entwicklungsbranch `feature/ci-cd-automation` getestet.
+
+Nach der Korrektur der Ruff-Konfiguration und ausgewählter SQL-Formatierungsstellen wurden alle konfigurierten Qualitätsprüfungen erfolgreich abgeschlossen.
+
+Die Änderungen wurden anschließend über **Pull Request #1** in den Hauptbranch `main` integriert.
+
+### Mehrwert der CI-Automatisierung
+
+Die Implementierung bietet mehrere Vorteile:
+
+- Automatisierte Erkennung ausgewählter Python-Codefehler
+- Einheitliche SQL-Formatierungsprüfungen
+- Prüfung der JSON-Struktur exportierter Fabric-Artefakte
+- Nachvollziehbare Integration von Änderungen über Git und Pull Requests
+- Wiederholbare Qualitätsprüfungen ohne aktive Microsoft-Fabric-Spark-Kapazität
+
+### Umfang und Grenzen
+
+Die aktuelle Lösung implementiert **Continuous Integration (CI)**.
+
+Sie führt statische Prüfungen durch, jedoch keine vollständigen Funktionstests der PySpark-Notebooks.
+
+Insbesondere werden keine Fabric-Pipelines gestartet, keine Delta-Tabellen in einer laufenden Umgebung geprüft und keine Power-BI-Berichte getestet.
+
+Ein automatisiertes Deployment in Microsoft Fabric (**Continuous Deployment – CD**) ist bisher nicht implementiert.
+
+**GitHub Actions:** [CI-Ausführungen ansehen](https://github.com/Chancel-Nouboussi/Automotive-Fabric-Data-Engineering/actions)
+
+**Pull Request:** [CI-Integration – PR #1](https://github.com/Chancel-Nouboussi/Automotive-Fabric-Data-Engineering/pull/1)
+
 ## Repository-Struktur
 
 ```text

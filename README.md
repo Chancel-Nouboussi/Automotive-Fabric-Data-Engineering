@@ -375,6 +375,60 @@ Simulation dashboard demonstrating 17 synthetic quality issues across five categ
 
 ---
 
+---
+
+## Continuous Integration (CI) with GitHub Actions
+
+This project includes an automated Continuous Integration workflow using GitHub Actions to validate source files before changes are integrated into the main branch.
+
+### CI Architecture
+
+The workflow is defined in:
+
+`.github/workflows/ci.yml`
+
+It runs automatically when changes are pushed to the configured branches and when pull requests target the `main` branch.
+
+### Automated Quality Checks
+
+| Tool | Validation |
+|---|---|
+| Ruff | Static Python checks for critical errors in Fabric notebooks |
+| SQLFluff | T-SQL formatting checks for SQL scripts |
+| Python / JSON | Structural validation of exported Fabric notebooks and pipeline definitions |
+| GitHub Actions | Automated execution and reporting of validation results |
+
+### Microsoft Fabric Compatibility
+
+Microsoft Fabric notebooks provide runtime objects such as `spark` and `display`.
+
+The project includes a `ruff.toml` configuration to account for these predefined objects during static code analysis.
+
+### CI Validation Results
+
+The CI workflow was successfully executed on the development branch `feature/ci-cd-automation`.
+
+The changes were reviewed and merged into `main` through Pull Request #1 after all configured checks passed.
+
+### Benefits
+
+- Automated detection of selected code and formatting issues
+- Consistent validation during development
+- Improved transparency of changes through Git and pull requests
+- Reproducible static quality checks without requiring an active Microsoft Fabric Spark session
+
+### Scope and Limitations
+
+The workflow performs static validation only.
+
+It does not execute PySpark notebooks, validate live Delta tables, deploy Fabric resources, or test the Power BI report.
+
+Continuous Deployment (CD) is not implemented in the current version.
+
+**CI workflow:** [View GitHub Actions](https://github.com/Chancel-Nouboussi/Automotive-Fabric-Data-Engineering/actions)
+
+**Pull Request:** [CI Integration – PR #1](https://github.com/Chancel-Nouboussi/Automotive-Fabric-Data-Engineering/pull/1)
+
 ## Technologies & Tools
 
 | Technology | Application in This Project |
