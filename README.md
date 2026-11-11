@@ -374,7 +374,102 @@ Simulation dashboard demonstrating 17 synthetic quality issues across five categ
 **Note:** All screenshots are provided for portfolio demonstration purposes. The simulation dashboard contains explicitly labeled synthetic results.
 
 ---
+---
 
+## Incremental Data Processing with Delta Lake MERGE
+
+### Overview
+
+The project includes an incremental data processing demonstration using PySpark and Delta Lake in Microsoft Fabric.
+
+Instead of replacing the complete dataset, the solution processes a small batch of new and modified automotive diagnostic records and applies changes to an existing Delta table.
+
+**Notebook:** `notebooks/NB_11_Incremental_Data_Processing.ipynb`
+
+**Target table:** `silver.synthetic_vehicle_diagnostics_incremental`
+
+### Processing Architecture
+
+```text
+Existing Bronze Dataset (1,000 records)
+                |
+                v
+    Incremental Delta Target
+        Initial Load
+                |
+                v
+     Incremental Test Batch
+      5 Diagnostic Records
+                |
+                v
+       Data Quality Gate
+                |
+           PASS only
+                |
+                v
+        Delta Lake MERGE
+           /        \
+          v          v
+      INSERT       UPDATE
+      3 rows       2 rows
+           \        /
+            v      v
+      1,003 Target Records
+                |
+                v
+       Delta MERGE History
+                |
+                v
+      Audit Logging & Validation
+```
+
+### Implementation
+
+The solution demonstrates:
+
+- Initial loading of 1,000 synthetic automotive diagnostic records into a separate Delta target table.
+- Creation of an incremental batch containing three new records and two updates.
+- Data quality validation before merging the batch.
+- Delta Lake `MERGE` using `TestID` as the record key.
+- Conditional updates that avoid overwriting records when their business fields are unchanged.
+- Idempotency testing through repeated processing of the same batch.
+- Audit logging based on Delta Lake transaction history.
+
+### Verified Results
+
+| Metric | Result |
+|---|---:|
+| Initial target records | 1,000 |
+| Incremental batch records | 5 |
+| Inserted records | 3 |
+| Updated records | 2 |
+| Final target records | 1,003 |
+| Duplicate TestIDs | 0 |
+| New records on repeat execution | 0 |
+| Changed records on repeat execution | 0 |
+| Audit metric mismatches | 0 |
+
+The first Delta Lake MERGE transaction recorded three inserts and two updates. Reprocessing the same batch did not introduce additional records or business-data changes.
+
+### Audit Logging
+
+The processing audit table is stored in:
+
+`dbo.incremental_processing_audit`
+
+It records transaction versions, source row counts, inserted, updated and deleted records, processing timestamps, and transaction status.
+
+Audit metrics were validated against the Delta Lake transaction history.
+
+### Scope and Limitations
+
+This implementation demonstrates incremental upserts using a controlled synthetic batch.
+
+It does not yet implement automatic change detection from an external source, watermark-based ingestion, concurrent write handling, or a scheduled incremental pipeline.
+
+The original Bronze, Silver, and Gold processing tables remain unchanged.
+
+All data is synthetic and intended for portfolio demonstration purposes.
 ---
 
 ## Continuous Integration (CI) with GitHub Actions
@@ -458,7 +553,10 @@ Automotive-Fabric-Data-Engineering/
 │   ├── NB_07_Silver_Advanced.ipynb
 │   ├── NB_08_Gold_Advanced_KPI.ipynb
 │   ├── NB_09_Data_Quality_Advanced.ipynb
-│   └── NB_10_Data_Quality_Negative_Test.ipynb
+│   ├── NB_10_Data_Quality_Negative_Test.ipynb
+│   └── NB_11_Incremental_Data_Processing.ipynb
+
+
 │
 ├── pipelines/
 │   ├── PL_Automotive_Data_Processing.json

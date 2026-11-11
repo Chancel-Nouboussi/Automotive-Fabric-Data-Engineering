@@ -503,6 +503,117 @@ Die Simulationsdaten sind ausdrücklich als solche gekennzeichnet.
 **Hinweis:** Sämtliche Fahrzeugdiagnosedaten wurden synthetisch erzeugt. Die simulierten Qualitätsprobleme dienen ausschließlich Demonstrationszwecken.
 
 ---
+---
+
+## Inkrementelle Datenverarbeitung mit Delta Lake MERGE
+
+### Projektübersicht
+
+Das Projekt wurde um eine inkrementelle Datenverarbeitung mit **PySpark und Delta Lake in Microsoft Fabric** erweitert.
+
+Anstatt den gesamten Datenbestand bei jeder Verarbeitung vollständig zu ersetzen, können neue und geänderte Fahrzeugdiagnose-Testdatensätze gezielt in eine bestehende Delta-Tabelle übernommen werden.
+
+**Notebook:** `notebooks/NB_11_Incremental_Data_Processing.ipynb`
+
+**Zieltabelle:** `silver.synthetic_vehicle_diagnostics_incremental`
+
+### Architektur der inkrementellen Verarbeitung
+
+```text
+Bestehende Bronze-Daten (1.000 Datensätze)
+                   |
+                   v
+      Inkrementelle Delta-Zieltabelle
+             Erstbeladung
+                   |
+                   v
+          Inkrementeller Batch
+              5 Testfälle
+                   |
+                   v
+           Data Quality Gate
+                   |
+              Nur bei PASS
+                   |
+                   v
+            Delta Lake MERGE
+              /         \
+             v           v
+          INSERT       UPDATE
+          3 Zeilen     2 Zeilen
+              \         /
+               v       v
+          1.003 Datensätze
+                   |
+                   v
+         Delta-Transaktionshistorie
+                   |
+                   v
+        Audit Logging und Validierung
+```
+
+### Technische Umsetzung
+
+Die Lösung umfasst folgende Verarbeitungsschritte:
+
+1. Erstbeladung von 1.000 synthetischen Fahrzeugdiagnose-Testdatensätzen in eine separate Delta-Tabelle.
+2. Erstellung eines inkrementellen Batches mit drei neuen und zwei geänderten Testfällen.
+3. Datenqualitätsprüfung vor der Übernahme.
+4. Inkrementelle Verarbeitung mit Delta Lake `MERGE` und `TestID` als Schlüssel.
+5. Aktualisierung bestehender Datensätze nur bei tatsächlich veränderten Datenfeldern.
+6. Überprüfung der Idempotenz durch erneute Verarbeitung desselben Batches.
+7. Protokollierung der Verarbeitungsergebnisse anhand der Delta-Transaktionshistorie.
+
+### Validierte Ergebnisse
+
+| Kennzahl | Ergebnis |
+|---|---:|
+| Ursprünglicher Datenbestand | 1.000 |
+| Inkrementeller Batch | 5 |
+| Neu eingefügte Datensätze | 3 |
+| Aktualisierte Datensätze | 2 |
+| Datenbestand nach MERGE | 1.003 |
+| Doppelte Test-IDs | 0 |
+| Neue Datensätze beim Wiederholungstest | 0 |
+| Veränderte Datensätze beim Wiederholungstest | 0 |
+| Abweichungen bei den Audit-Metriken | 0 |
+
+Die erste MERGE-Transaktion wurde mit drei eingefügten und zwei aktualisierten Datensätzen erfolgreich protokolliert.
+
+Beim Wiederholungstest wurden keine zusätzlichen Datensätze oder fachlichen Änderungen festgestellt.
+
+### Audit Logging
+
+Die Ergebnisse der inkrementellen Verarbeitung werden in folgender Delta-Tabelle protokolliert:
+
+`dbo.incremental_processing_audit`
+
+Erfasst werden unter anderem:
+
+- Zeitpunkt der Protokollierung
+- Verarbeitete Zieltabelle
+- Delta-Tabellenversion
+- Anzahl eingelesener Datensätze
+- Eingefügte, aktualisierte und gelöschte Datensätze
+- Verarbeitungsstatus
+
+Die gespeicherten Kennzahlen wurden mit der Delta-Transaktionshistorie verglichen und erfolgreich validiert.
+
+### Mehrwert für Data Engineering
+
+Die Erweiterung demonstriert, wie sich neue und veränderte Daten gezielt verarbeiten lassen, ohne bei jeder Aktualisierung den gesamten Datenbestand neu zu laden.
+
+Darüber hinaus zeigt sie, wie sich **Datenqualität, Wiederholbarkeit und Nachvollziehbarkeit** bei inkrementellen Datenverarbeitungsprozessen überprüfen lassen.
+
+### Grenzen der Implementierung
+
+Die Demonstration verwendet einen kontrolliert erzeugten synthetischen Datenbatch.
+
+Eine automatische Änderungserkennung aus externen Datenquellen, Watermark-basierte Verarbeitung, parallele Schreibzugriffe und eine zeitgesteuerte inkrementelle Pipeline sind noch nicht implementiert.
+
+Die bestehenden Bronze-, Silver- und Gold-Tabellen der ursprünglichen Pipeline bleiben unverändert.
+
+*Hinweis: Sämtliche Daten sind synthetisch und dienen ausschließlich der technischen Demonstration.*
 
 ---
 
@@ -574,7 +685,7 @@ Ein automatisiertes Deployment in Microsoft Fabric (**Continuous Deployment – 
 
 ```text
 Automotive-Fabric-Data-Engineering/
-├── notebooks/       # 10 PySpark-Notebooks
+├── notebooks/       # 11 PySpark-Notebooks
 ├── pipelines/       # 3 Fabric-Pipeline-Definitionen
 ├── sql/             # 5 SQL-Skripte
 ├── powerbi/         # Power-BI-Berichtsdatei
